@@ -30,7 +30,6 @@ type TerraformAction struct {
 func (a *TerraformAction) Initialise() *TerraformAction {
 	// Prepare the command arguments
 	args := append([]string{a.action}, a.params.OptsStringSlice()...)
-	fmt.Printf("Initialising TerraformAction with args: %s\n", args)
 
 	// Create the command
 	a.Cmd = exec.Command(a.bin.path, args...)
