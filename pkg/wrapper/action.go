@@ -61,6 +61,7 @@ func (a *TerraformAction) InitLogger(log *OutputLog) (err error) {
 	scannerStdout := bufio.NewScanner(a.out.Stdout)
 	go func() {
 		for scannerStdout.Scan() {
+			// Print the stdout output to the console and store it in the log
 			fmt.Print(
 				a.logs.Stdout(scannerStdout.Text()).String() + "\n",
 			)
@@ -74,6 +75,7 @@ func (a *TerraformAction) InitLogger(log *OutputLog) (err error) {
 	scannerStderr := bufio.NewScanner(a.out.Stderr)
 	go func() {
 		for scannerStderr.Scan() {
+			// Print the stderr output to the console and store it in the log
 			fmt.Print(
 				a.logs.Stderr(scannerStderr.Text()).String() + "\n",
 			)
