@@ -51,6 +51,9 @@ func (a *TerraformAction) Run() (err error) {
 	return a.Cmd.Run()
 }
 
+// Initializes the logging mechanism for the TerraformAction.
+// It sets up the stdout and stderr pipes for the command execution and
+// starts goroutines to capture and log the output.
 func (a *TerraformAction) InitLogger(log *OutputLog) (err error) {
 	a.logs = log
 
