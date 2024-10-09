@@ -48,7 +48,7 @@ func (a *TerraformAction) Initialise() *TerraformAction {
 // Run executes the Terraform command associated with the TerraformAction instance.
 // It starts the command and returns any error encountered during the start process.
 func (a *TerraformAction) Run() (err error) {
-	return a.Cmd.Start()
+	return a.Cmd.Run()
 }
 
 func (a *TerraformAction) InitLogger(log *OutputLog) (err error) {
