@@ -8,12 +8,14 @@ type TerraformInitParams struct {
 	BackendConfig string
 
 	// Indicates whether the output should be formatted as JSON.
-	Json *bool
+	Json bool
 }
 
 // Creates and returns a new instance of TerraformInitParams.
 func NewInitParams() *TerraformInitParams {
-	return &TerraformInitParams{}
+	return &TerraformInitParams{
+		Json: true,
+	}
 }
 
 // This function generates a map of Terraform initialization options based on the
