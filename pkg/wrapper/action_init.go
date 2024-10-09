@@ -35,11 +35,11 @@ func (p *TerraformInitParams) Opts() map[string][]string {
 
 	// Indicates whether the output should be formatted as JSON.
 	if p.Json {
-		opts["json"] = []string{}
+		opts["json"] = []string{""}
 	}
 
 	// Disable color output, because product is not a terminal
-	opts["no-color"] = []string{}
+	opts["no-color"] = []string{""}
 
 	return opts
 }
