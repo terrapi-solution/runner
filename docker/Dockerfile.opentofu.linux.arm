@@ -1,14 +1,14 @@
 # Use a specific version tag for better reproducibility
-FROM --platform=linux/arm/v6 ghcr.io/opentofu/opentof:1.8
+FROM ghcr.io/opentofu/opentof:1.8
 
 # Set environment variables
 ENV TERRAPI_PLATFORM=opentofu
 
 # Copy the binary to the appropriate directory
-COPY bin/terrapi-worker /usr/binterrapi-worker
+COPY bin/terrapi-worker /usr/bin/terrapi-worker
 
 # Ensure the binary has execute permissions
-RUN chmod +x /usr/local/bin/terrapi-worker
+RUN chmod +x /usr/bin/terrapi-worker
 
 # Set the entrypoint
 ENTRYPOINT ["/usr/bin/terrapi-worker"]
