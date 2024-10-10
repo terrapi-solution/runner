@@ -5,10 +5,10 @@ FROM ghcr.io/opentofu/opentofu:1.8.3-arm64
 ENV TERRAPI_PLATFORM=opentofu
 
 # Copy the binary to the appropriate directory
-COPY bin/terrapi-worker /usr/bin/terrapi-worker
+COPY bin/terrapi-runner /usr/bin/terrapi-runner
 
 # Ensure the binary has execute permissions
-RUN chmod +x /usr/bin/terrapi-worker
+RUN chmod +x /usr/bin/terrapi-runner
 
 # Set the entrypoint
-ENTRYPOINT ["/usr/bin/terrapi-worker"]
+ENTRYPOINT ["/usr/bin/terrapi-runner"]

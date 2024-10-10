@@ -14,7 +14,7 @@ func setupConfig() {
 		viper.SetConfigFile(viper.GetString("config.file"))
 	} else {
 		viper.SetConfigName("config")
-		viper.AddConfigPath("/etc/terrapi/worker")
+		viper.AddConfigPath("/etc/terrapi/runner")
 		viper.AddConfigPath("$HOME/.terrapi/")
 	}
 

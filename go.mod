@@ -1,4 +1,4 @@
-module github.com/thomas-illiet/terrapi-worker
+module github.com/thomas-illiet/terrapi-runner
 
 go 1.23.1
 

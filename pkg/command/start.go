@@ -9,23 +9,24 @@ import (
 var (
 	serverCmd = &cobra.Command{
 		Use:   "start",
-		Short: "Start integrated server",
+		Short: "Start workflow",
 		Run:   startAction,
 		Args:  cobra.NoArgs,
 	}
 
-	managerServerAddr = "localhost:8085"
-	stateServerAddr   = "localhost:8080"
+	deploymentID      uint = 0
+	managerServerAddr      = "localhost:8085"
+	stateServerAddr        = "localhost:8080"
 )
 
 // Initialization of CLI flags and viper config binding
 func init() {
 	rootCmd.AddCommand(serverCmd)
 
-	serverCmd.PersistentFlags().Uint("deployment", 0, "Deployment identifier")
+	serverCmd.PersistentFlags().Uint("deployment", deploymentID, "Deployment identifier")
 	viper.BindPFlag("deployment.id", serverCmd.PersistentFlags().Lookup("deployment"))
 
-	serverCmd.PersistentFlags().String("manager-server", managerServerAddr, "Address of the worker manager")
+	serverCmd.PersistentFlags().String("manager-server", managerServerAddr, "Address of the runner manager")
 	viper.SetDefault("manager.address", managerServerAddr)
 	viper.BindPFlag("manager.address", serverCmd.PersistentFlags().Lookup("manager-server"))
 
