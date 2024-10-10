@@ -95,6 +95,8 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
+          flavor: |
+            suffix=-${{ matrix.target }}-${{ matrix.goarch }}
 
       - name: Setup qemu
         id: qemu
