@@ -1,0 +1,78 @@
+---
+name: docker
+
+"on":
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - platform: linux/386
+            goos: linux
+            goarch: 386
+          - platform: linux/amd64
+            goos: linux
+            goarch: amd64
+          - platform: linux/arm64
+            goos: linux
+            goarch: arm64
+          - platform: linux/arm/6
+            goos: linux
+            goarch: arm
+            goarm: 6
+
+    steps:
+      - name: Checkout source
+        id: source
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+
+      - name: Setup golang
+        id: golang
+        uses: actions/setup-go@v5
+        with:
+          go-version: ^1.23.0
+
+      - name: Run generate
+        id: generate
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          GOARM: ${{ matrix.goarm }}
+        run: make generate
+
+      - name: Run build
+        id: build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          GOARM: ${{ matrix.goarm }}
+        run: make build
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          images: |
+            thomas-illiet/terrapi-worker
+            quay.io/thomas-illiet/terrapi-worker
+            ghcr.io/thomas-illiet/terrapi-worker
+          labels: |
+            org.opencontainers.image.vendor=Thomas ILLIET
+            maintainer=Thomas ILLIET <contact@thomas-illiet.fr>
+          tags: |
+            type=ref,event=pr
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/master' }}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+          flavor: |
+            suffix=-${{ matrix.goos }}-${{ matrix.goarch }}
