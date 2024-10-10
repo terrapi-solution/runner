@@ -32,19 +32,19 @@ jobs:
             goos: linux
             goarch: arm
             goarm: 6
-          - target: openbao
+          - target: opentofu
             platform: linux/386
             goos: linux
             goarch: 386
-          - target: openbao
+          - target: opentofu
             platform: linux/amd64
             goos: linux
             goarch: amd64
-          - target: openbao
+          - target: opentofu
             platform: linux/arm64
             goos: linux
             goarch: arm64
-          - target: openbao
+          - target: opentofu
             platform: linux/arm/6
             goos: linux
             goarch: arm
@@ -131,7 +131,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Build image
         id: publish
         uses: docker/build-push-action@v6
