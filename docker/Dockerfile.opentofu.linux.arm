@@ -1,5 +1,5 @@
 # Use a specific version tag for better reproducibility
-FROM ghcr.io/opentofu/opentof:1.8
+FROM ghcr.io/opentofu/opentofu:1.8
 
 # Set environment variables
 ENV TERRAPI_PLATFORM=opentofu
