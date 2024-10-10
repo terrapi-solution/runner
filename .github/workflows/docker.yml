@@ -15,16 +15,37 @@ jobs:
     strategy:
       matrix:
         include:
-          - platform: linux/386
+          - target: terraform
+            platform: linux/386
             goos: linux
             goarch: 386
-          - platform: linux/amd64
+          - target: terraform
+            platform: linux/amd64
             goos: linux
             goarch: amd64
-          - platform: linux/arm64
+          - target: terraform
+            platform: linux/arm64
             goos: linux
             goarch: arm64
-          - platform: linux/arm/6
+          - target: terraform
+            platform: linux/arm/6
+            goos: linux
+            goarch: arm
+            goarm: 6
+          - target: openbao
+            platform: linux/386
+            goos: linux
+            goarch: 386
+          - target: openbao
+            platform: linux/amd64
+            goos: linux
+            goarch: amd64
+          - target: openbao
+            platform: linux/arm64
+            goos: linux
+            goarch: arm64
+          - target: openbao
+            platform: linux/arm/6
             goos: linux
             goarch: arm
             goarm: 6
@@ -75,4 +96,25 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
           flavor: |
-            suffix=-${{ matrix.goos }}-${{ matrix.goarch }}
+            suffix=-${{ matrix.target }}-${{ matrix.goos }}-${{ matrix.goarch }}
+
+      - name: Setup qemu
+        id: qemu
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image
+        id: publish
+        uses: docker/build-push-action@v6
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: .
+          provenance: false
+          file: docker/Dockerfile.${{ matrix.target }}.${{ matrix.goos }}.${{ matrix.goarch }}
+          platforms: ${{ matrix.platform }}
+          push: ${{ github.event_name != 'pull_request' }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
