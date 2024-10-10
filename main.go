@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/thomas-illiet/terrapi-worker/pkg/command"
+	"github.com/thomas-illiet/terrapi-runner/pkg/command"
 )
 
 func main() {

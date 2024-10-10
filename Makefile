@@ -1,5 +1,5 @@
 SHELL := bash
-NAME := terrapi-worker
+NAME := terrapi-runner
 BIN := bin
 
 GOBUILD ?= CGO_ENABLED=0 go build
