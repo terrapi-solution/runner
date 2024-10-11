@@ -8,7 +8,7 @@ import (
 var (
 	rootCmd = &cobra.Command{
 		Use:   "terrapi-runner",
-		Short: "Terraform runner",
+		Short: "Terrapi runner",
 
 		SilenceErrors: false,
 		SilenceUsage:  true,

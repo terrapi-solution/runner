@@ -1,4 +1,4 @@
-package common
+package wrapper
 
 import (
 	"fmt"
@@ -10,36 +10,36 @@ const (
 	STDOUT = "stdout"
 )
 
-type WrapperOutput struct {
+type Output struct {
 	Stderr io.ReadCloser
 	Stdout io.ReadCloser
 }
 
-type WrapperOutputLog struct {
-	Entries []*WrapperOutputLogEntry `json:"entries"`
+type OutputLog struct {
+	Entries []*OutputLogEntry `json:"entries"`
 }
 
-type WrapperOutputLogEntry struct {
+type OutputLogEntry struct {
 	Type    string   `json:"type"`
 	Content string   `json:"content"`
 	Tags    []string `json:"prefix"`
 }
 
 // Creates and returns a new instance of OutputLog.
-func NewOutputLogs() *WrapperOutputLog {
-	return &WrapperOutputLog{
-		Entries: make([]*WrapperOutputLogEntry, 0),
+func NewOutputLogs() *OutputLog {
+	return &OutputLog{
+		Entries: make([]*OutputLogEntry, 0),
 	}
 }
 
 // Creates a new OutputLogEntry with the specified message.
-func (ol *WrapperOutputLog) Stdout(message string) *WrapperOutputLogEntry {
+func (ol *OutputLog) Stdout(message string) *OutputLogEntry {
 	return ol.StdoutWithTags(message, []string{"tf"})
 }
 
 // Creates a new OutputLogEntry with the specified message and tags.
-func (ol *WrapperOutputLog) StdoutWithTags(message string, tags []string) *WrapperOutputLogEntry {
-	return ol.Append(&WrapperOutputLogEntry{
+func (ol *OutputLog) StdoutWithTags(message string, tags []string) *OutputLogEntry {
+	return ol.Append(&OutputLogEntry{
 		Type:    STDOUT,
 		Content: message,
 		Tags:    tags,
@@ -47,13 +47,13 @@ func (ol *WrapperOutputLog) StdoutWithTags(message string, tags []string) *Wrapp
 }
 
 // Creates a new OutputLogEntry with the specified error message.
-func (ol *WrapperOutputLog) Stderr(message string) *WrapperOutputLogEntry {
+func (ol *OutputLog) Stderr(message string) *OutputLogEntry {
 	return ol.StderrWithTags(message, []string{"tf"})
 }
 
 // Creates a new OutputLogEntry with the specified error message and tags.
-func (ol *WrapperOutputLog) StderrWithTags(message string, tags []string) *WrapperOutputLogEntry {
-	return ol.Append(&WrapperOutputLogEntry{
+func (ol *OutputLog) StderrWithTags(message string, tags []string) *OutputLogEntry {
+	return ol.Append(&OutputLogEntry{
 		Type:    STDERR,
 		Content: message,
 		Tags:    tags,
@@ -61,7 +61,7 @@ func (ol *WrapperOutputLog) StderrWithTags(message string, tags []string) *Wrapp
 }
 
 // Appends the specified OutputLogEntry to the OutputLog.
-func (ol *WrapperOutputLog) Append(ole *WrapperOutputLogEntry) *WrapperOutputLogEntry {
+func (ol *OutputLog) Append(ole *OutputLogEntry) *OutputLogEntry {
 	ol.Entries = append(ol.Entries, ole)
 	return ole
 }

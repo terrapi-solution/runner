@@ -1,32 +1,34 @@
-package common
+package helper
 
 import (
+	"errors"
 	"fmt"
 	"time"
 )
 
-type retryHelper struct {
+type RetryHelper struct {
 	Retry     int           `json:"retry" description:"How many times to retry the operation"`
 	RetryTime time.Duration `json:"retry-time" description:"How long to wait between retries"`
 }
 
-type retryableErr struct {
-	err error
+type RetryableErr struct {
+	Err error
 }
 
-func (e retryableErr) Unwrap() error {
-	return e.err
+func (e RetryableErr) Unwrap() error {
+	return e.Err
 }
 
-func (e retryableErr) Error() string {
-	return e.err.Error()
+func (e RetryableErr) Error() string {
+	return e.Err.Error()
 }
 
-func (r *retryHelper) doRetry(handler func(int) error) error {
+func (r *RetryHelper) DoRetry(handler func(int) error) error {
 	err := handler(0)
 
 	for retry := 1; retry <= r.Retry; retry++ {
-		if _, ok := err.(retryableErr); !ok {
+		var retryableErr RetryableErr
+		if !errors.As(err, &retryableErr) {
 			return err
 		}
 

@@ -1,6 +1,6 @@
-package common
+package wrapper
 
-type WrapperInitParams struct {
+type InitParams struct {
 	// Backend indicates whether the backend service should be initialized.
 	Backend *bool
 
@@ -11,16 +11,16 @@ type WrapperInitParams struct {
 	Json bool
 }
 
-// Creates and returns a new instance of WrapperInitParams.
-func NewInitParams() *WrapperInitParams {
-	return &WrapperInitParams{
+// Creates and returns a new instance of InitParams.
+func NewInitParams() *InitParams {
+	return &InitParams{
 		Json: true,
 	}
 }
 
-// This function generates a map of Wrapper initialization options based on the
-// parameters provided in the WrapperInitParams struct.
-func (p *WrapperInitParams) Opts() map[string][]string {
+// This function generates a map of  initialization options based on the
+// parameters provided in the InitParams struct.
+func (p *InitParams) Opts() map[string][]string {
 	opts := make(map[string][]string)
 
 	// Backend indicates whether the backend service should be initialized.
@@ -44,15 +44,15 @@ func (p *WrapperInitParams) Opts() map[string][]string {
 	return opts
 }
 
-// Returns a string representation of the Wrapper initialization options
-// based on the parameters provided in the WrapperInitParams struct.
-func (p *WrapperInitParams) OptsString() string {
+// Returns a string representation of the  initialization options
+// based on the parameters provided in the InitParams struct.
+func (p *InitParams) OptsString() string {
 	return extractOptsString(p)
 }
 
-// Converts the WrapperInitParams options into a slice of strings.
-// This function extracts the options from the WrapperInitParams struct and returns them
+// Converts the InitParams options into a slice of strings.
+// This function extracts the options from the InitParams struct and returns them
 // as a slice of strings, which can be used for further processing or passing to other functions.
-func (p *WrapperInitParams) OptsStringSlice() []string {
+func (p *InitParams) OptsStringSlice() []string {
 	return extractOptsStringSlice(p)
 }

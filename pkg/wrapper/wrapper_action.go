@@ -1,4 +1,4 @@
-package common
+package wrapper
 
 import (
 	"bufio"
@@ -8,26 +8,26 @@ import (
 	"strings"
 )
 
-type WrapperActionParams interface {
+type ActionParams interface {
 	Opts() map[string][]string
 	OptsString() string
 	OptsStringSlice() []string
 }
 
-type WrapperAction struct {
+type Action struct {
 	Cmd    *exec.Cmd
 	Dir    string
-	out    *WrapperOutput
+	out    *Output
 	logs   *OutputLog
 	action string
-	bin    *WrapperCli
-	params WrapperActionParams
+	bin    *Cli
+	params ActionParams
 }
 
-// Initialise prepares and initializes a WrapperAction by setting up the command
+// Initialise prepares and initializes a Action by setting up the command
 // arguments, creating the command, setting the working directory if specified,
 // and initializing the output.
-func (a *WrapperAction) Initialise() *WrapperAction {
+func (a *Action) Initialise() *Action {
 	// Prepare the command arguments
 	args := append([]string{a.action}, a.params.OptsStringSlice()...)
 
@@ -40,21 +40,21 @@ func (a *WrapperAction) Initialise() *WrapperAction {
 	}
 
 	// Initialize the output
-	a.out = &WrapperOutput{}
+	a.out = &Output{}
 
 	return a
 }
 
-// Run executes the Wrapper command associated with the WrapperAction instance.
+// Run executes the  command associated with the Action instance.
 // It starts the command and returns any error encountered during the start process.
-func (a *WrapperAction) Run() (err error) {
+func (a *Action) Run() (err error) {
 	return a.Cmd.Run()
 }
 
-// Initializes the logging mechanism for the WrapperAction.
+// Initializes the logging mechanism for the Action.
 // It sets up the stdout and stderr pipes for the command execution and
 // starts goroutines to capture and log the output.
-func (a *WrapperAction) InitLogger(log *OutputLog) (err error) {
+func (a *Action) InitLogger(log *OutputLog) (err error) {
 	a.logs = log
 
 	// Configure stdout capture
@@ -88,12 +88,12 @@ func (a *WrapperAction) InitLogger(log *OutputLog) (err error) {
 	return
 }
 
-// Processes the options from WrapperActionParams and returns them as a sorted slice of strings.
+// Processes the options from ActionParams and returns them as a sorted slice of strings.
 // It sorts the keys of the options map, then iterates over each key and its associated values.
 // For each key-value pair, it constructs a string in the format "-key=value" and appends it to the output slice.
-// If the key is "var", it appends the key and value as separate elements to handle Wrapper variable syntax.
+// If the key is "var", it appends the key and value as separate elements to handle  variable syntax.
 // The resulting slice contains all options in a consistent and sorted order.
-func extractOptsStringSlice(p WrapperActionParams) []string {
+func extractOptsStringSlice(p ActionParams) []string {
 	opts := p.Opts()
 	keys := mapStringSliceKeys(opts)
 	sort.Strings(keys)
@@ -117,10 +117,10 @@ func extractOptsStringSlice(p WrapperActionParams) []string {
 	return outputs
 }
 
-// Takes a WrapperActionParams object and returns a string
+// Takes a ActionParams object and returns a string
 // representation of its options. It does this by joining the elements of the
 // slice returned by extractOptsStringSlice with a space character.
-func extractOptsString(p WrapperActionParams) string {
+func extractOptsString(p ActionParams) string {
 	optionsSlice := extractOptsStringSlice(p)
 	options := strings.Join(optionsSlice, " ")
 	return options

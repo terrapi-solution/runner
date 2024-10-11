@@ -1,4 +1,4 @@
-package common
+package git
 
 import (
 	"os"
@@ -7,17 +7,17 @@ import (
 	"github.com/go-git/go-git/v5/plumbing"
 )
 
-type gitClient struct {
+type Client struct {
 	options *git.CloneOptions
 }
 
 // Creates a new instance of gitClient.
-func NewGitClient() *gitClient {
-	return &gitClient{}
+func NewGitClient() *Client {
+	return &Client{}
 }
 
 // Initializes the gitClient with the specified repository path and branch.
-func (c *gitClient) PrepareClient(path string, branch string) {
+func (c *Client) PrepareClient(path string, branch string) {
 	c.options = &git.CloneOptions{
 		URL:           path,
 		Progress:      os.Stdout,
@@ -28,7 +28,7 @@ func (c *gitClient) PrepareClient(path string, branch string) {
 }
 
 // Clone a Git repository to the specified path.
-func (c *gitClient) Clone(path string) (*git.Repository, error) {
+func (c *Client) Clone(path string) (*git.Repository, error) {
 	repo, err := git.PlainClone(path, false, c.options)
 	if err != nil {
 		return nil, err

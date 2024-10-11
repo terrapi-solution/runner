@@ -1,6 +1,7 @@
 package command
 
 import (
+	"errors"
 	"os"
 	"strings"
 
@@ -10,24 +11,24 @@ import (
 
 // Loads the application configuration using Viper.
 func setupConfig() {
-	if viper.GetString("config.file") != "" {
-		viper.SetConfigFile(viper.GetString("config.file"))
-	} else {
-		viper.SetConfigName("config")
-		viper.AddConfigPath("/etc/terrapi/runner")
-		viper.AddConfigPath("$HOME/.terrapi/")
-	}
+	// Set the default configuration values
+	viper.SetConfigName("config")
+	viper.AddConfigPath("/etc/terrapi/runner")
+	viper.AddConfigPath("$HOME/.terrapi/runner")
 
-	viper.SetEnvPrefix("terrapi")
+	// Set the environment variables
+	viper.SetEnvPrefix("TERRAPI")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
 
+	// Attempt to read the configuration file
 	if err := readConfig(); err != nil {
 		log.Error().
 			Err(err).
 			Msg("Failed to read config file")
 	}
 
+	// Unmarshal the configuration into the struct
 	if err := viper.Unmarshal(cfg); err != nil {
 		log.Error().
 			Err(err).
@@ -45,12 +46,14 @@ func readConfig() error {
 	}
 
 	// Return nil if the config file was not found
-	if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+	var configFileNotFoundError viper.ConfigFileNotFoundError
+	if errors.As(err, &configFileNotFoundError) {
 		return nil
 	}
 
 	// Return nil if there was a file path error
-	if _, ok := err.(*os.PathError); ok {
+	var pathError *os.PathError
+	if errors.As(err, &pathError) {
 		return nil
 	}
 
