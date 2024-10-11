@@ -1,4 +1,4 @@
-package helper
+package common
 
 import (
 	"fmt"
@@ -49,7 +49,7 @@ func PrintBoldMessage(message string, value ...color.Attribute) {
 func PrintLine(value ...color.Attribute) {
 	c := color.New(value...).Add(color.Bold)
 
-	line := make([]rune, GetTerminalSize())
+	line := make([]rune, getTerminalSize())
 	for i := range line {
 		line[i] = '-'
 	}
@@ -58,7 +58,7 @@ func PrintLine(value ...color.Attribute) {
 
 // Returns the width of the terminal in characters.
 // If it fails to get the terminal size, it defaults to 80 characters.
-func GetTerminalSize() int {
+func getTerminalSize() int {
 	screenWidth, _, err := term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
 		// Fallback to a standard terminal width of 80 characters
