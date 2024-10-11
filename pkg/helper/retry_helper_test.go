@@ -17,7 +17,7 @@ func TestDoRetry(t *testing.T) {
 	}{
 		{
 			name:          "Error is of type retryableErr",
-			err:           retryableErr{err: errors.New("error")},
+			err:           RetryableErr{Err: errors.New("error")},
 			expectedCount: 4,
 		},
 		{
@@ -34,12 +34,12 @@ func TestDoRetry(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			r := retryHelper{
+			r := RetryHelper{
 				Retry: 3,
 			}
 
 			retryCount := 0
-			err := r.doRetry(func(_ int) error {
+			err := r.DoRetry(func(_ int) error {
 				retryCount++
 				return c.err
 			})
