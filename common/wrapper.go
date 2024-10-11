@@ -1,10 +1,7 @@
 package common
 
 type WrapperCli struct {
-	// path represents the file system path used within the wrapper package.
-	path string
-
-	// Represents the directory path where the application will perform its operations.
+	path             string
 	workingDirectory string
 }
 

@@ -1,9 +1,8 @@
 package main
 
 import (
+	"github.com/thomas-illiet/terrapi-runner/command"
 	"os"
-
-	"github.com/thomas-illiet/terrapi-runner/pkg/command"
 )
 
 func main() {

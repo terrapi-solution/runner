@@ -19,7 +19,7 @@ type gitClone struct {
 	client *gitClient
 }
 
-// Creates a new instance of gitExtractor.
+// Creates a new instance of gitClone.
 func NewGitExtractor(cfg GitCloneConfig) *gitClone {
 	return &gitClone{
 		retryHelper:    retryHelper{Retry: 3, RetryTime: 2 * time.Second},

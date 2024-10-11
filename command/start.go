@@ -1,6 +1,7 @@
 package command
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -15,7 +16,7 @@ var (
 	}
 
 	deploymentID      uint = 0
-	managerServerAddr      = "localhost:8085"
+	managerServerAddr      = "localhost:8080"
 	stateServerAddr        = "localhost:8080"
 )
 
@@ -37,4 +38,8 @@ func init() {
 
 // Starts the server based on configuration and manages graceful shutdown
 func startAction(_ *cobra.Command, _ []string) {
+	fmt.Println("Starting the workflow...")
+	fmt.Println("Retrieving configuration...")
+	fmt.Println("Cloning repository...")
+	fmt.Println("Execute deployment...")
 }

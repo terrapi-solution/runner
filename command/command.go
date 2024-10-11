@@ -3,14 +3,13 @@ package command
 import (
 	"github.com/spf13/cobra"
 	"github.com/thomas-illiet/terrapi-runner/pkg/config"
-	"github.com/thomas-illiet/terrapi-runner/pkg/version"
 )
 
 var (
 	rootCmd = &cobra.Command{
-		Use:           "terrapi-runner",
-		Short:         "Terraform runner",
-		Version:       version.String,
+		Use:   "terrapi-runner",
+		Short: "Terraform runner",
+
 		SilenceErrors: false,
 		SilenceUsage:  true,
 
