@@ -1,6 +1,6 @@
-package wrapper
+package common
 
-type TerraformInitParams struct {
+type WrapperInitParams struct {
 	// Backend indicates whether the backend service should be initialized.
 	Backend *bool
 
@@ -11,16 +11,16 @@ type TerraformInitParams struct {
 	Json bool
 }
 
-// Creates and returns a new instance of TerraformInitParams.
-func NewInitParams() *TerraformInitParams {
-	return &TerraformInitParams{
+// Creates and returns a new instance of WrapperInitParams.
+func NewInitParams() *WrapperInitParams {
+	return &WrapperInitParams{
 		Json: true,
 	}
 }
 
-// This function generates a map of Terraform initialization options based on the
-// parameters provided in the TerraformInitParams struct.
-func (p *TerraformInitParams) Opts() map[string][]string {
+// This function generates a map of Wrapper initialization options based on the
+// parameters provided in the WrapperInitParams struct.
+func (p *WrapperInitParams) Opts() map[string][]string {
 	opts := make(map[string][]string)
 
 	// Backend indicates whether the backend service should be initialized.
@@ -44,15 +44,15 @@ func (p *TerraformInitParams) Opts() map[string][]string {
 	return opts
 }
 
-// Returns a string representation of the Terraform initialization options
-// based on the parameters provided in the TerraformInitParams struct.
-func (p *TerraformInitParams) OptsString() string {
+// Returns a string representation of the Wrapper initialization options
+// based on the parameters provided in the WrapperInitParams struct.
+func (p *WrapperInitParams) OptsString() string {
 	return extractOptsString(p)
 }
 
-// Converts the TerraformInitParams options into a slice of strings.
-// This function extracts the options from the TerraformInitParams struct and returns them
+// Converts the WrapperInitParams options into a slice of strings.
+// This function extracts the options from the WrapperInitParams struct and returns them
 // as a slice of strings, which can be used for further processing or passing to other functions.
-func (p *TerraformInitParams) OptsStringSlice() []string {
+func (p *WrapperInitParams) OptsStringSlice() []string {
 	return extractOptsStringSlice(p)
 }

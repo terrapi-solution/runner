@@ -1,4 +1,4 @@
-package wrapper
+package common
 
 import (
 	"bufio"
@@ -8,26 +8,26 @@ import (
 	"strings"
 )
 
-type TerraformActionParams interface {
+type WrapperActionParams interface {
 	Opts() map[string][]string
 	OptsString() string
 	OptsStringSlice() []string
 }
 
-type TerraformAction struct {
+type WrapperAction struct {
 	Cmd    *exec.Cmd
 	Dir    string
-	out    *TerraformOutput
+	out    *WrapperOutput
 	logs   *OutputLog
 	action string
-	bin    *TerraformCli
-	params TerraformActionParams
+	bin    *WrapperCli
+	params WrapperActionParams
 }
 
-// Initialise prepares and initializes a TerraformAction by setting up the command
+// Initialise prepares and initializes a WrapperAction by setting up the command
 // arguments, creating the command, setting the working directory if specified,
 // and initializing the output.
-func (a *TerraformAction) Initialise() *TerraformAction {
+func (a *WrapperAction) Initialise() *WrapperAction {
 	// Prepare the command arguments
 	args := append([]string{a.action}, a.params.OptsStringSlice()...)
 
@@ -40,21 +40,21 @@ func (a *TerraformAction) Initialise() *TerraformAction {
 	}
 
 	// Initialize the output
-	a.out = &TerraformOutput{}
+	a.out = &WrapperOutput{}
 
 	return a
 }
 
-// Run executes the Terraform command associated with the TerraformAction instance.
+// Run executes the Wrapper command associated with the WrapperAction instance.
 // It starts the command and returns any error encountered during the start process.
-func (a *TerraformAction) Run() (err error) {
+func (a *WrapperAction) Run() (err error) {
 	return a.Cmd.Run()
 }
 
-// Initializes the logging mechanism for the TerraformAction.
+// Initializes the logging mechanism for the WrapperAction.
 // It sets up the stdout and stderr pipes for the command execution and
 // starts goroutines to capture and log the output.
-func (a *TerraformAction) InitLogger(log *OutputLog) (err error) {
+func (a *WrapperAction) InitLogger(log *OutputLog) (err error) {
 	a.logs = log
 
 	// Configure stdout capture
@@ -88,12 +88,12 @@ func (a *TerraformAction) InitLogger(log *OutputLog) (err error) {
 	return
 }
 
-// Processes the options from TerraformActionParams and returns them as a sorted slice of strings.
+// Processes the options from WrapperActionParams and returns them as a sorted slice of strings.
 // It sorts the keys of the options map, then iterates over each key and its associated values.
 // For each key-value pair, it constructs a string in the format "-key=value" and appends it to the output slice.
-// If the key is "var", it appends the key and value as separate elements to handle Terraform variable syntax.
+// If the key is "var", it appends the key and value as separate elements to handle Wrapper variable syntax.
 // The resulting slice contains all options in a consistent and sorted order.
-func extractOptsStringSlice(p TerraformActionParams) []string {
+func extractOptsStringSlice(p WrapperActionParams) []string {
 	opts := p.Opts()
 	keys := mapStringSliceKeys(opts)
 	sort.Strings(keys)
@@ -117,10 +117,10 @@ func extractOptsStringSlice(p TerraformActionParams) []string {
 	return outputs
 }
 
-// Takes a TerraformActionParams object and returns a string
+// Takes a WrapperActionParams object and returns a string
 // representation of its options. It does this by joining the elements of the
 // slice returned by extractOptsStringSlice with a space character.
-func extractOptsString(p TerraformActionParams) string {
+func extractOptsString(p WrapperActionParams) string {
 	optionsSlice := extractOptsStringSlice(p)
 	options := strings.Join(optionsSlice, " ")
 	return options
