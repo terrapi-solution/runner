@@ -12,7 +12,7 @@ func New(binPath string) *Cli {
 	}
 }
 
-// Initializes a new  action with the "init" command.
+// Initializes a new  action with the "init" cmd.
 func (t *Cli) Init(params *InitParams) *Action {
 	return &Action{
 		action: "init",

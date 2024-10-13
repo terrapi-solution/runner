@@ -1,8 +1,8 @@
-package command
+package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/thomas-illiet/terrapi-runner/pkg/config"
+	"github.com/thomas-illiet/terrapi-runner/internal/config"
 )
 
 var (
@@ -29,7 +29,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolP("version", "v", false, "Print the current version of that tool")
 }
 
-// Run parses the command line arguments and executes the program.
+// Run parses the cmd line arguments and executes the program.
 func Run() error {
 	return rootCmd.Execute()
 }

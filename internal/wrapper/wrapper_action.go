@@ -24,14 +24,14 @@ type Action struct {
 	params ActionParams
 }
 
-// Initialise prepares and initializes a Action by setting up the command
-// arguments, creating the command, setting the working directory if specified,
+// Initialise prepares and initializes a Action by setting up the cmd
+// arguments, creating the cmd, setting the working directory if specified,
 // and initializing the output.
 func (a *Action) Initialise() *Action {
-	// Prepare the command arguments
+	// Prepare the cmd arguments
 	args := append([]string{a.action}, a.params.OptsStringSlice()...)
 
-	// Create the command
+	// Create the cmd
 	a.Cmd = exec.Command(a.bin.path, args...)
 
 	// Set the working directory if specified
@@ -45,14 +45,14 @@ func (a *Action) Initialise() *Action {
 	return a
 }
 
-// Run executes the  command associated with the Action instance.
-// It starts the command and returns any error encountered during the start process.
+// Run executes the  cmd associated with the Action instance.
+// It starts the cmd and returns any error encountered during the start process.
 func (a *Action) Run() (err error) {
 	return a.Cmd.Run()
 }
 
 // Initializes the logging mechanism for the Action.
-// It sets up the stdout and stderr pipes for the command execution and
+// It sets up the stdout and stderr pipes for the cmd execution and
 // starts goroutines to capture and log the output.
 func (a *Action) InitLogger(log *OutputLog) (err error) {
 	a.logs = log
