@@ -1,4 +1,4 @@
-module github.com/thomas-illiet/terrapi-runner
+module github.com/terrapi-solution/runner
 
 go 1.23.1
 

@@ -2,7 +2,7 @@ package git
 
 import (
 	"fmt"
-	"github.com/thomas-illiet/terrapi-runner/internal/helper"
+	"github.com/terrapi-solution/runner/internal/helper"
 	"time"
 )
 

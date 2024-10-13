@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/thomas-illiet/terrapi-runner/cmd"
+	"github.com/terrapi-solution/runner/cmd"
 	"os"
 )
 

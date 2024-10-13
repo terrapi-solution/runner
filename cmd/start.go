@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/thomas-illiet/terrapi-runner/internal/client"
 )
 
 // Command-line flags default values
@@ -44,8 +43,6 @@ func init() {
 func startAction(_ *cobra.Command, _ []string) {
 	fmt.Println("Starting the workflow...")
 	fmt.Println("Retrieving configuration...")
-	webclient := client.NewClient(cfg)
-	webclient.GetDeployment(deploymentID)
 
 	fmt.Println("Cloning repository...")
 	fmt.Println("Execute deployment...")
