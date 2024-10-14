@@ -1,9 +1,10 @@
 package cmd
 
 import (
-	"fmt"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/terrapi-solution/runner/internal/watcher"
 )
 
 // Command-line flags default values
@@ -39,9 +40,6 @@ func init() {
 
 // Starts the server based on configuration and manages graceful shutdown
 func runnerAction(_ *cobra.Command, _ []string) {
-	fmt.Println("Starting the workflow...")
-	fmt.Println("Retrieving configuration...")
-
-	fmt.Println("Cloning repository...")
-	fmt.Println("Execute deployment...")
+	log.Info().Msg("Starting the runner...")
+	watcher.Processing(deploymentID, getContext())
 }

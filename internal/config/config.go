@@ -1,16 +1,21 @@
 package config
 
-type managerConfig struct {
+type service struct {
+	CheckInterval int `json:"check-interval" mapstructure:"check-interval"`
+}
+
+type manager struct {
 	Address string `json:"address" mapstructure:"address"`
 }
 
-type stateConfig struct {
+type state struct {
 	Address string `json:"address" mapstructure:"address"`
 }
 
 type Config struct {
-	Manager managerConfig `json:"manager" mapstructure:"manager"`
-	State   stateConfig   `json:"state" mapstructure:"state"`
+	Manager manager `json:"manager" mapstructure:"manager"`
+	State   state   `json:"state" mapstructure:"state"`
+	Service service `json:"service" mapstructure:"service"`
 }
 
 // Load initializes a default configuration struct.

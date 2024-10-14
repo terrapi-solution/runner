@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"context"
 	"errors"
 	"os"
+	"os/signal"
 	"strings"
 
 	"github.com/rs/zerolog/log"
@@ -64,4 +66,23 @@ func readConfig() error {
 
 	// Return the error for other issues
 	return err
+}
+
+// Returns a context with a signal handler for graceful shutdown
+func getContext() context.Context {
+	ctx := context.Background()
+
+	// Trap Ctrl+C and call cancel on the context
+	ctx, cancel := context.WithCancel(ctx)
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		select {
+		case <-c:
+			cancel()
+		case <-ctx.Done():
+		}
+	}()
+
+	return ctx
 }
