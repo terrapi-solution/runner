@@ -9,6 +9,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+var (
+	managerServerAddr = "localhost:8080"
+	stateServerAddr   = "localhost:8080"
+)
+
 // Loads the application configuration using Viper.
 func setupConfig() {
 	// Set the default configuration values
