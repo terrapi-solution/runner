@@ -26,9 +26,9 @@ func init() {
 	startCmd.AddCommand(serviceCmd)
 
 	//region global parameters
-	serviceCmd.PersistentFlags().String("manager-server", managerServerAddr, "Address of the runner manager")
-	viper.SetDefault("manager.address", managerServerAddr)
-	_ = viper.BindPFlag("manager.address", serviceCmd.PersistentFlags().Lookup("manager-server"))
+	serviceCmd.PersistentFlags().String("controller-server", controllerServerAddr, "Address of the controller")
+	viper.SetDefault("controller.address", controllerServerAddr)
+	_ = viper.BindPFlag("controller.address", serviceCmd.PersistentFlags().Lookup("controller-server"))
 
 	serviceCmd.PersistentFlags().String("state-server", stateServerAddr, "Address of the state manager")
 	viper.SetDefault("state.address", stateServerAddr)

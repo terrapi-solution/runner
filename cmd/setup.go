@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"errors"
+	"github.com/terrapi-solution/runner/internal/config"
 	"os"
 	"os/signal"
 	"strings"
@@ -12,19 +13,20 @@ import (
 )
 
 var (
-	managerServerAddr = "localhost:8080"
-	stateServerAddr   = "localhost:8080"
+	controllerServerAddr = "localhost:8080"
+	stateServerAddr      = "localhost:8080"
 )
 
 // Loads the application configuration using Viper.
 func setupConfig() {
 	// Set the default configuration values
-	viper.SetConfigName("config")
+	viper.SetConfigName("runner")
 	viper.AddConfigPath("/etc/terrapi/runner")
 	viper.AddConfigPath("$HOME/.terrapi/runner")
+	viper.AddConfigPath("./config")
 
 	// Set the environment variables
-	viper.SetEnvPrefix("TERRAPI")
+	viper.SetEnvPrefix("terrapi")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
 
@@ -41,6 +43,9 @@ func setupConfig() {
 			Err(err).
 			Msg("Failed to parse config file")
 	}
+
+	// Set the global configuration.
+	config.Set(cfg)
 }
 
 // Attempts to read the configuration from the file specified.

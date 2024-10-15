@@ -12,6 +12,9 @@
 .idea/
 .vscode/
 
+# Configuration files
+config/
+
 # Test binary, built with `go test -c`
 *.test
 
