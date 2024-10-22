@@ -3,7 +3,7 @@ module github.com/terrapi-solution/runner
 go 1.23.1
 
 require (
-	github.com/fatih/color v1.17.0
+	github.com/fatih/color v1.18.0
 	github.com/go-git/go-git/v5 v5.12.0
 	github.com/rs/zerolog v1.33.0
 	github.com/spf13/cobra v1.8.1
