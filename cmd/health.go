@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/terrapi-solution/protocol/health"
+	health "github.com/terrapi-solution/protocol/health/v1"
 	"github.com/terrapi-solution/runner/internal/client"
 )
 

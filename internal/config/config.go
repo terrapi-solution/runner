@@ -17,6 +17,7 @@ type controller struct {
 
 // certificates defines the controller credential configuration.
 type certificates struct {
+	Status   bool   `mapstructure:"status"`
 	CertFile string `mapstructure:"cert"`
 	KeyFile  string `mapstructure:"key"`
 	CaFile   string `mapstructure:"ca"`

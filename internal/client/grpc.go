@@ -5,18 +5,21 @@ import (
 	"crypto/x509"
 	"fmt"
 	"github.com/rs/zerolog/log"
-	"github.com/terrapi-solution/protocol/activity"
-	"github.com/terrapi-solution/protocol/deployment"
-	"github.com/terrapi-solution/protocol/health"
+	activity "github.com/terrapi-solution/protocol/activity/v1"
+	deployment "github.com/terrapi-solution/protocol/deployment/v1"
+	health "github.com/terrapi-solution/protocol/health/v1"
 	"github.com/terrapi-solution/runner/internal/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 	"net"
 	"os"
 	"strconv"
 )
 
 type Client struct {
+	conn *grpc.ClientConn
+
 	Activity   activity.ActivityServiceClient
 	Deployment deployment.DeploymentServiceClient
 	Health     health.HealthServiceClient
@@ -27,24 +30,35 @@ func NewClient() *Client {
 	// Load the configuration
 	cfg := config.Get()
 
-	// Load the TLS certificate
-	tlsConfig, err := loadTLSConfig(
-		cfg.Controller.Certificates.CertFile,
-		cfg.Controller.Certificates.KeyFile,
-		cfg.Controller.Certificates.CaFile)
-	if err != nil {
-		log.Panic().Err(err).Msg("failed to load TLS configuration")
-	}
-
+	var conn *grpc.ClientConn
+	var err error
 	address := net.JoinHostPort(cfg.Controller.Host, strconv.Itoa(cfg.Controller.Port))
-	conn, err := grpc.NewClient(
-		address,
-		grpc.WithTransportCredentials(tlsConfig))
-	if err != nil {
-		log.Panic().Err(err).Msg("failed to connect to gRPC server")
+
+	if cfg.Controller.Certificates.Status {
+		// Load the TLS certificate
+		tlsConfig, err := loadTLSConfig(
+			cfg.Controller.Certificates.CertFile,
+			cfg.Controller.Certificates.KeyFile,
+			cfg.Controller.Certificates.CaFile)
+		if err != nil {
+			log.Panic().Err(err).Msg("failed to load TLS configuration")
+		}
+
+		conn, err = grpc.NewClient(
+			address,
+			grpc.WithTransportCredentials(tlsConfig))
+		if err != nil {
+			log.Panic().Err(err).Msg("failed to connect to gRPC server")
+		}
+	} else {
+		conn, err = grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			log.Panic().Err(err).Msg("failed to connect to gRPC server")
+		}
 	}
 
 	client := &Client{
+		conn:       conn,
 		Activity:   activity.NewActivityServiceClient(conn),
 		Deployment: deployment.NewDeploymentServiceClient(conn),
 		Health:     health.NewHealthServiceClient(conn),
@@ -77,4 +91,11 @@ func loadTLSConfig(certFile, keyFile, caFile string) (credentials.TransportCrede
 	}
 
 	return credentials.NewTLS(tlsConfig), nil
+}
+
+func (c *Client) Close() {
+	// Close the connection
+	if err := c.conn.Close(); err != nil {
+		log.Error().Err(err).Msg("failed to close the connection")
+	}
 }

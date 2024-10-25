@@ -35,3 +35,7 @@ func (c *Client) Clone(path string) (*git.Repository, error) {
 	}
 	return repo, nil
 }
+
+func (c *Client) Remove(s string) {
+	os.RemoveAll(s)
+}

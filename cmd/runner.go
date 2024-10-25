@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"context"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/terrapi-solution/runner/internal/watcher"
+	"github.com/terrapi-solution/protocol/activity/v1"
+	"github.com/terrapi-solution/runner/internal/client"
 )
 
 // Command-line flags default values
@@ -41,5 +43,13 @@ func init() {
 // Starts the server based on configuration and manages graceful shutdown
 func runnerAction(_ *cobra.Command, _ []string) {
 	log.Info().Msg("Starting the runner...")
-	watcher.Processing(deploymentID, getContext())
+	//watcher.Processing(deploymentID, getContext())
+
+	rpcClient := client.NewClient()
+	request := &activity.InsertRequest{
+		Deployment: int32(1),
+		Pointer:    activity.Pointer_POINTER_STDOUT,
+		Message:    "scannerStdout.Text()",
+	}
+	rpcClient.Activity.Insert(context.Background(), request)
 }

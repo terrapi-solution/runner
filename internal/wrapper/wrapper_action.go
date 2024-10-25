@@ -2,7 +2,10 @@ package wrapper
 
 import (
 	"bufio"
+	"context"
 	"fmt"
+	activity "github.com/terrapi-solution/protocol/activity/v1"
+	"github.com/terrapi-solution/runner/internal/client"
 	"os/exec"
 	"sort"
 	"strings"
@@ -57,6 +60,7 @@ func (a *Action) Run() (err error) {
 func (a *Action) InitLogger(log *OutputLog) (err error) {
 	a.logs = log
 
+	rpcClient := client.NewClient()
 	// Configure stdout capture
 	if a.out.Stdout, err = a.Cmd.StdoutPipe(); err != nil {
 		return
@@ -64,6 +68,12 @@ func (a *Action) InitLogger(log *OutputLog) (err error) {
 	scannerStdout := bufio.NewScanner(a.out.Stdout)
 	go func() {
 		for scannerStdout.Scan() {
+			request := &activity.InsertRequest{
+				Deployment: int32(1),
+				Pointer:    activity.Pointer_POINTER_STDOUT,
+				Message:    scannerStdout.Text(),
+			}
+			rpcClient.Activity.Insert(context.Background(), request)
 			// Print the stdout output to the console and store it in the log
 			fmt.Print(
 				a.logs.Stdout(scannerStdout.Text()).String() + "\n",
