@@ -1,5 +1,5 @@
 # Use a specific version tag for better reproducibility
-FROM hashicorp/terraform:1.9.8
+FROM hashicorp/terraform:1.10.3
 
 # Set environment variables
 ENV TERRAPI_PLATFORM=terraform
